@@ -3,6 +3,7 @@ const NotFoundError = require('../errors/NotFoundError.js');
 const UserDataError = require('../errors/userDataError.js');
 const MongoDBConnectionError = require('../errors/mongoDBConnectionError.js');
 const { ObjectId } = require('mongodb');
+const AppError = require('../errors/appError.js');
 
 async function getOneTransaction(transactionId) {
   console.log('transactionId: ', transactionId);
@@ -20,7 +21,10 @@ async function getOneTransaction(transactionId) {
       throw new UserDataError(
         'You must enter a valid MongoId for the transactionId.'
       );
-  } catch {
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error;
+    }
     throw new MongoDBConnectionError('There was a problem with the database.');
   }
 }
@@ -35,7 +39,10 @@ async function getAllTransactions() {
     }
 
     return data;
-  } catch {
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error;
+    }
     throw new MongoDBConnectionError(
       'There was a problem connecting with the database.'
     );
@@ -52,7 +59,10 @@ async function createNewTransaction(entry) {
       throw new MongoDBConnectionError(
         'There was a problem saving to the database.  Transaction not saved.'
       );
-  } catch {
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error;
+    }
     throw new MongoDBConnectionError(
       'There was a problem connecting with the database.'
     );
@@ -70,7 +80,10 @@ async function updateTransactionEntry(transactionId, updates) {
           .updateOne({ _id: _id }, { $set: updates });
 
         return result;
-      } catch {
+      } catch (error) {
+        if (error instanceof AppError) {
+          throw error;
+        }
         throw new MongoDBConnectionError(
           'There was a problem with the database.  Update failed.'
         );
@@ -97,7 +110,10 @@ async function deleteTransactionFromDatabase(transactionId) {
           .collection('transactions')
           .deleteOne({ _id: _id });
         return result;
-      } catch {
+      } catch (error) {
+        if (error instanceof AppError) {
+          throw error;
+        }
         throw new MongoDBConnectionError(
           'There was a problem with the database.  Transaction deletion failed.'
         );

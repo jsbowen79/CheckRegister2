@@ -2,19 +2,24 @@ const { getDB } = require('../models/mongoDb.js');
 const NotFoundError = require('../errors/NotFoundError.js');
 const UserDataError = require('../errors/userDataError.js');
 const MongoDBConnectionError = require('../errors/mongoDBConnectionError.js');
+const AppError = require('../errors/appError.js');
 
 async function getOne(accountId) {
-  console.log('accountId: ', accountId, typeof accountId);
   try {
     const db = getDB();
     const data = await db
       .collection('accounts')
       .findOne({ accountId: accountId });
+    console.log('Data: ', data);
     if (!data) {
+      console.log('no data, throwing not found error.');
       throw new NotFoundError(`Account ${accountId} does not exist.`);
     }
     return data;
-  } catch {
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error;
+    }
     throw new MongoDBConnectionError('There was a problem with the database.');
   }
 }
@@ -29,7 +34,10 @@ async function getAll() {
     }
 
     return data;
-  } catch {
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error;
+    }
     throw new MongoDBConnectionError(
       'There was a problem connecting with the database.'
     );
@@ -45,7 +53,10 @@ async function createNewAccount(entry) {
       throw new MongoDBConnectionError(
         'There was a problem saving to the database.  Account not saved.'
       );
-  } catch {
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error;
+    }
     throw new MongoDBConnectionError(
       'There was a problem connecting with the database.'
     );
@@ -62,7 +73,10 @@ async function updateDatabaseEntry(accountId, updates) {
 
       console.log('result: ', result);
       return result;
-    } catch {
+    } catch (error) {
+      if (error instanceof AppError) {
+        throw error;
+      }
       throw new MongoDBConnectionError(
         'There was a problem with the database.  Update failed.'
       );
@@ -82,7 +96,10 @@ async function deleteFromDatabase(accountId) {
         .collection('accounts')
         .deleteOne({ accountId: accountId });
       return result;
-    } catch {
+    } catch (error) {
+      if (error instanceof AppError) {
+        throw error;
+      }
       throw new MongoDBConnectionError(
         'There was a problem with the database.  File deletion failed.'
       );
