@@ -1,0 +1,391 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "CheckRegister API",
+    "description": "Allows for CRUD operations involved in tracking accounts, transactions, and balances.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000"
+    }
+  ],
+  "paths": {
+    "/account": {
+      "get": {
+        "description": "Get a list of all accounts.",
+        "responses": {
+          "404": {
+            "description": "The database contains no accounts."
+          },
+          "500": {
+            "description": "There was a problem with the database."
+          }
+        }
+      },
+      "post": {
+        "description": "Create a new account",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "accountId": {
+                    "type": "number"
+                  },
+                  "_balance": {
+                    "type": "number"
+                  },
+                  "_pendingBalance": {
+                    "type": "number"
+                  },
+                  "currencyType": {
+                    "type": "string"
+                  },
+                  "accountStatus": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "accountName": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "owner": {
+                    "type": "string"
+                  },
+                  "accountNumber": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "300": {
+            "description": "Please provide required account information."
+          },
+          "500": {
+            "description": "There was a problem with the database."
+          }
+        }
+      }
+    },
+
+    "/account/{accountId}": {
+      "get": {
+        "description": "Get a single account by id.",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Account not found."
+          },
+          "500": {
+            "description": "Database error."
+          }
+        }
+      },
+
+      "put": {
+        "description": "Update an account by id.",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "accountId": {
+                    "type": "number"
+                  },
+                  "_balance": {
+                    "type": "number"
+                  },
+                  "_pendingBalance": {
+                    "type": "number"
+                  },
+                  "currencyType": {
+                    "type": "string"
+                  },
+                  "accountStatus": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "accountName": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "owner": {
+                    "type": "string"
+                  },
+                  "accountNumber": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "300": {
+            "description": "Account id required."
+          },
+          "404": {
+            "description": "Account not found."
+          },
+          "500": {
+            "description": "Database error."
+          }
+        }
+      },
+
+      "delete": {
+        "description": "Delete an account by id.",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+
+        "responses": {
+          "300": {
+            "description": "Account id required."
+          },
+          "404": {
+            "description": "Account not found."
+          },
+          "500": {
+            "description": "Database error."
+          }
+        }
+      }
+    },
+
+    "/transaction": {
+      "get": {
+        "description": "Get all transactions.",
+
+        "responses": {
+          "404": {
+            "description": "No transactions found."
+          },
+          "500": {
+            "description": "Database error."
+          }
+        }
+      },
+
+      "post": {
+        "description": "Create a transaction.",
+
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number"
+                  },
+                  "transMedia": {
+                    "type": "string"
+                  },
+                  "transMemo": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "accountId": {
+                    "type": "number"
+                  },
+                  "transType": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "endingBalance": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "200": {
+            "description": "Transaction created successfully."
+          },
+          "500": {
+            "description": "Database error."
+          }
+        }
+      }
+    },
+
+    "/transaction/{transactionId}": {
+      "get": {
+        "description": "Get transaction by id.",
+
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Transaction not found."
+          },
+          "500": {
+            "description": "Database error."
+          }
+        }
+      },
+
+      "put": {
+        "description": "Update a transaction in the database.",
+
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number"
+                  },
+                  "transMedia": {
+                    "type": "string"
+                  },
+                  "transMemo": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "accountId": {
+                    "type": "number"
+                  },
+                  "transType": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "endingBalance": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "200": {
+            "description": "Transaction updated successfully."
+          },
+          "404": {
+            "description": "Transaction not found."
+          },
+          "500": {
+            "description": "Database error."
+          }
+        }
+      },
+
+      "delete": {
+        "description": "Delete a transaction by id.",
+
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Transaction deleted successfully."
+          },
+          "404": {
+            "description": "Transaction not found."
+          },
+          "500": {
+            "description": "Database error."
+          }
+        }
+      }
+    }
+  }
+}
