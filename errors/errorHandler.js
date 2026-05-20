@@ -1,5 +1,6 @@
 const AppError = require('./appError.js');
 function errorHandler(err, req, res) {
+  console.log('Error Middleware Hit');
   console.error(err);
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({
