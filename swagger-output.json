@@ -336,16 +336,15 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "amount": { "type": "number" },
+                  "transMedia": { "type": "string" },
+                  "transMemo": { "type": "string" },
+                  "category": { "type": "string" },
                   "accountId": { "type": "number" },
-                  "_balance": { "type": "number" },
-                  "_pendingBalance": { "type": "number" },
-                  "currencyType": { "type": "string" },
-                  "accountStatus": { "type": "string" },
-                  "createdAt": { "type": "string" },
-                  "accountName": { "type": "string" },
-                  "type": { "type": "string" },
-                  "owner": { "type": "string" },
-                  "accountNumber": { "type": "number" }
+                  "transType": { "type": "string" },
+                  "date": { "type": "string" },
+                  "status": { "type": "string" },
+                  "endingBalance": { "type": "number" }
                 }
               }
             }
