@@ -320,7 +320,7 @@
         ],
         "parameters": [
           {
-            "name": "accountId",
+            "name": "transactionId",
             "in": "path",
             "required": true,
             "schema": {
@@ -373,6 +373,16 @@
         "security": [
           {
             "githubOAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
           }
         ],
 
