@@ -324,7 +324,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "number"
+              "type": "string"
             }
           }
         ],
@@ -381,7 +381,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "number"
+              "type": "string"
             }
           }
         ],
