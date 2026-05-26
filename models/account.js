@@ -10,9 +10,7 @@ async function getOne(accountId) {
     const data = await db
       .collection('accounts')
       .findOne({ accountId: accountId });
-    console.log('Data: ', data);
     if (!data) {
-      console.log('no data, throwing not found error.');
       throw new NotFoundError(`Account ${accountId} does not exist.`);
     }
     return data;

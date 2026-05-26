@@ -2,32 +2,63 @@
   "openapi": "3.0.0",
   "info": {
     "title": "CheckRegister API",
-    "description": "Allows for CRUD operations involved in tracking accounts, transactions, and balances.",
+    "description": "Allows CRUD operations for accounts and transactions with GitHub OAuth authentication.",
     "version": "1.0.0"
   },
+
   "servers": [
     {
-      "url": "https://checkregister2.onrender.com/"
+      "url": "https://checkregister2.onrender.com"
     },
     {
-      "url": "http://localhost:5000/"
+      "url": "http://localhost:5000"
     }
   ],
+
+  "components": {
+    "securitySchemes": {
+      "githubOAuth": {
+        "type": "oauth2",
+        "description": "GitHub OAuth (session-based authentication handled by backend)",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://github.com/login/oauth/authorize",
+            "tokenUrl": "NOT_USED_FOR_SESSION_AUTH",
+            "scopes": {
+              "user:email": "Access user email"
+            }
+          }
+        }
+      }
+    }
+  },
+
   "paths": {
     "/account": {
       "get": {
         "description": "Get a list of all accounts.",
         "responses": {
+          "200": {
+            "description": "Successful response"
+          },
           "404": {
             "description": "The database contains no accounts."
           },
           "500": {
-            "description": "There was a problem with the database."
+            "description": "Database error."
           }
         }
       },
+
       "post": {
         "description": "Create a new account",
+
+        "security": [
+          {
+            "githubOAuth": []
+          }
+        ],
+
         "requestBody": {
           "required": true,
           "content": {
@@ -35,47 +66,31 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "accountId": {
-                    "type": "number"
-                  },
-                  "_balance": {
-                    "type": "number"
-                  },
-                  "_pendingBalance": {
-                    "type": "number"
-                  },
-                  "currencyType": {
-                    "type": "string"
-                  },
-                  "accountStatus": {
-                    "type": "string"
-                  },
-                  "createdAt": {
-                    "type": "string"
-                  },
-                  "accountName": {
-                    "type": "string"
-                  },
-                  "type": {
-                    "type": "string"
-                  },
-                  "owner": {
-                    "type": "string"
-                  },
-                  "accountNumber": {
-                    "type": "number"
-                  }
+                  "accountId": { "type": "number" },
+                  "_balance": { "type": "number" },
+                  "_pendingBalance": { "type": "number" },
+                  "currencyType": { "type": "string" },
+                  "accountStatus": { "type": "string" },
+                  "createdAt": { "type": "string" },
+                  "accountName": { "type": "string" },
+                  "type": { "type": "string" },
+                  "owner": { "type": "string" },
+                  "accountNumber": { "type": "number" }
                 }
               }
             }
           }
         },
+
         "responses": {
-          "300": {
-            "description": "Please provide required account information."
+          "400": {
+            "description": "Missing required account information."
+          },
+          "401": {
+            "description": "Unauthorized. Authentication required."
           },
           "500": {
-            "description": "There was a problem with the database."
+            "description": "Database error."
           }
         }
       }
@@ -84,6 +99,7 @@
     "/account/{accountId}": {
       "get": {
         "description": "Get a single account by id.",
+
         "parameters": [
           {
             "name": "accountId",
@@ -94,7 +110,11 @@
             }
           }
         ],
+
         "responses": {
+          "200": {
+            "description": "Successful response"
+          },
           "404": {
             "description": "Account not found."
           },
@@ -105,7 +125,14 @@
       },
 
       "put": {
-        "description": "Update an account by id.",
+        "description": "Update an account by id",
+
+        "security": [
+          {
+            "githubOAuth": []
+          }
+        ],
+
         "parameters": [
           {
             "name": "accountId",
@@ -124,36 +151,16 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "accountId": {
-                    "type": "number"
-                  },
-                  "_balance": {
-                    "type": "number"
-                  },
-                  "_pendingBalance": {
-                    "type": "number"
-                  },
-                  "currencyType": {
-                    "type": "string"
-                  },
-                  "accountStatus": {
-                    "type": "string"
-                  },
-                  "createdAt": {
-                    "type": "string"
-                  },
-                  "accountName": {
-                    "type": "string"
-                  },
-                  "type": {
-                    "type": "string"
-                  },
-                  "owner": {
-                    "type": "string"
-                  },
-                  "accountNumber": {
-                    "type": "number"
-                  }
+                  "accountId": { "type": "number" },
+                  "_balance": { "type": "number" },
+                  "_pendingBalance": { "type": "number" },
+                  "currencyType": { "type": "string" },
+                  "accountStatus": { "type": "string" },
+                  "createdAt": { "type": "string" },
+                  "accountName": { "type": "string" },
+                  "type": { "type": "string" },
+                  "owner": { "type": "string" },
+                  "accountNumber": { "type": "number" }
                 }
               }
             }
@@ -161,8 +168,11 @@
         },
 
         "responses": {
-          "300": {
-            "description": "Account id required."
+          "200": {
+            "description": "Account updated successfully."
+          },
+          "401": {
+            "description": "Unauthorized."
           },
           "404": {
             "description": "Account not found."
@@ -174,7 +184,14 @@
       },
 
       "delete": {
-        "description": "Delete an account by id.",
+        "description": "Delete an account by id",
+
+        "security": [
+          {
+            "githubOAuth": []
+          }
+        ],
+
         "parameters": [
           {
             "name": "accountId",
@@ -187,8 +204,11 @@
         ],
 
         "responses": {
-          "300": {
-            "description": "Account id required."
+          "200": {
+            "description": "Account deleted successfully."
+          },
+          "401": {
+            "description": "Unauthorized."
           },
           "404": {
             "description": "Account not found."
@@ -205,6 +225,9 @@
         "description": "Get all transactions.",
 
         "responses": {
+          "200": {
+            "description": "Successful response"
+          },
           "404": {
             "description": "No transactions found."
           },
@@ -215,7 +238,13 @@
       },
 
       "post": {
-        "description": "Create a transaction.",
+        "description": "Create a transaction",
+
+        "security": [
+          {
+            "githubOAuth": []
+          }
+        ],
 
         "requestBody": {
           "required": true,
@@ -224,33 +253,15 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "amount": {
-                    "type": "number"
-                  },
-                  "transMedia": {
-                    "type": "string"
-                  },
-                  "transMemo": {
-                    "type": "string"
-                  },
-                  "category": {
-                    "type": "string"
-                  },
-                  "accountId": {
-                    "type": "number"
-                  },
-                  "transType": {
-                    "type": "string"
-                  },
-                  "date": {
-                    "type": "string"
-                  },
-                  "status": {
-                    "type": "string"
-                  },
-                  "endingBalance": {
-                    "type": "number"
-                  }
+                  "amount": { "type": "number" },
+                  "transMedia": { "type": "string" },
+                  "transMemo": { "type": "string" },
+                  "category": { "type": "string" },
+                  "accountId": { "type": "number" },
+                  "transType": { "type": "string" },
+                  "date": { "type": "string" },
+                  "status": { "type": "string" },
+                  "endingBalance": { "type": "number" }
                 }
               }
             }
@@ -261,6 +272,9 @@
           "200": {
             "description": "Transaction created successfully."
           },
+          "401": {
+            "description": "Unauthorized."
+          },
           "500": {
             "description": "Database error."
           }
@@ -270,7 +284,7 @@
 
     "/transaction/{transactionId}": {
       "get": {
-        "description": "Get transaction by id.",
+        "description": "Get transaction by id",
 
         "parameters": [
           {
@@ -285,7 +299,7 @@
 
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Successful response"
           },
           "404": {
             "description": "Transaction not found."
@@ -297,62 +311,20 @@
       },
 
       "put": {
-        "description": "Update a transaction in the database.",
+        "description": "Update transaction",
 
-        "parameters": [
+        "security": [
           {
-            "name": "transactionId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "githubOAuth": []
           }
         ],
-
-        "requestBody": {
-          "required": false,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "amount": {
-                    "type": "number"
-                  },
-                  "transMedia": {
-                    "type": "string"
-                  },
-                  "transMemo": {
-                    "type": "string"
-                  },
-                  "category": {
-                    "type": "string"
-                  },
-                  "accountId": {
-                    "type": "number"
-                  },
-                  "transType": {
-                    "type": "string"
-                  },
-                  "date": {
-                    "type": "string"
-                  },
-                  "status": {
-                    "type": "string"
-                  },
-                  "endingBalance": {
-                    "type": "number"
-                  }
-                }
-              }
-            }
-          }
-        },
 
         "responses": {
           "200": {
             "description": "Transaction updated successfully."
+          },
+          "401": {
+            "description": "Unauthorized."
           },
           "404": {
             "description": "Transaction not found."
@@ -364,16 +336,11 @@
       },
 
       "delete": {
-        "description": "Delete a transaction by id.",
+        "description": "Delete transaction",
 
-        "parameters": [
+        "security": [
           {
-            "name": "transactionId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "githubOAuth": []
           }
         ],
 
@@ -381,11 +348,50 @@
           "200": {
             "description": "Transaction deleted successfully."
           },
+          "401": {
+            "description": "Unauthorized."
+          },
           "404": {
             "description": "Transaction not found."
           },
           "500": {
             "description": "Database error."
+          }
+        }
+      }
+    },
+
+    "/auth/github": {
+      "get": {
+        "description": "Redirects user to GitHub OAuth login",
+        "responses": {
+          "302": {
+            "description": "Redirect to GitHub"
+          }
+        }
+      }
+    },
+
+    "/auth/github/callback": {
+      "get": {
+        "description": "OAuth callback from GitHub",
+        "responses": {
+          "302": {
+            "description": "Redirect after successful login"
+          },
+          "401": {
+            "description": "Authentication failed"
+          }
+        }
+      }
+    },
+
+    "/auth/logout": {
+      "get": {
+        "description": "Logs out current session",
+        "responses": {
+          "200": {
+            "description": "Logged out successfully"
           }
         }
       }
