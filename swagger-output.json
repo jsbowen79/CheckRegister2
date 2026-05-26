@@ -145,7 +145,7 @@
         ],
 
         "requestBody": {
-          "required": true,
+          "required": false,
           "content": {
             "application/json": {
               "schema": {
@@ -318,6 +318,39 @@
             "githubOAuth": []
           }
         ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "accountId": { "type": "number" },
+                  "_balance": { "type": "number" },
+                  "_pendingBalance": { "type": "number" },
+                  "currencyType": { "type": "string" },
+                  "accountStatus": { "type": "string" },
+                  "createdAt": { "type": "string" },
+                  "accountName": { "type": "string" },
+                  "type": { "type": "string" },
+                  "owner": { "type": "string" },
+                  "accountNumber": { "type": "number" }
+                }
+              }
+            }
+          }
+        },
 
         "responses": {
           "200": {
